@@ -2109,6 +2109,32 @@ export interface Usage {
   service_tier: 'standard' | 'priority' | 'batch' | null;
 }
 
+export interface UserLocation {
+  type: 'approximate';
+
+  /**
+   * The city of the user.
+   */
+  city?: string | null;
+
+  /**
+   * The two letter
+   * [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the
+   * user.
+   */
+  country?: string | null;
+
+  /**
+   * The region of the user.
+   */
+  region?: string | null;
+
+  /**
+   * The [IANA timezone](https://nodatime.org/TimeZones) of the user.
+   */
+  timezone?: string | null;
+}
+
 export interface WebFetchBlock {
   content: DocumentBlock;
 
@@ -2379,39 +2405,16 @@ export interface WebSearchTool20250305 {
    * Parameters for the user's location. Used to provide more relevant search
    * results.
    */
-  user_location?: WebSearchTool20250305.UserLocation | null;
+  user_location?: UserLocation | null;
 }
 
+// backward compat
 export namespace WebSearchTool20250305 {
   /**
-   * Parameters for the user's location. Used to provide more relevant search
-   * results.
+   * @deprecated Import `UserLocation` from `anthropic` directly instead of using
+   *   `WebSearchTool20250305.UserLocation`.
    */
-  export interface UserLocation {
-    type: 'approximate';
-
-    /**
-     * The city of the user.
-     */
-    city?: string | null;
-
-    /**
-     * The two letter
-     * [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the
-     * user.
-     */
-    country?: string | null;
-
-    /**
-     * The region of the user.
-     */
-    region?: string | null;
-
-    /**
-     * The [IANA timezone](https://nodatime.org/TimeZones) of the user.
-     */
-    timezone?: string | null;
-  }
+  export type UserLocation = Messages.UserLocation;
 }
 
 export interface WebSearchTool20260209 {
@@ -2463,49 +2466,20 @@ export interface WebSearchTool20260209 {
    * Parameters for the user's location. Used to provide more relevant search
    * results.
    */
-  user_location?: WebSearchTool20260209.UserLocation | null;
+  user_location?: UserLocation | null;
 }
 
+// backward compat
 export namespace WebSearchTool20260209 {
   /**
-   * Parameters for the user's location. Used to provide more relevant search
-   * results.
+   * @deprecated Import `UserLocation` from `anthropic` directly instead of using
+   *   `WebSearchTool20260209.UserLocation`.
    */
-  export interface UserLocation {
-    type: 'approximate';
-
-    /**
-     * The city of the user.
-     */
-    city?: string | null;
-
-    /**
-     * The two letter
-     * [ISO country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the
-     * user.
-     */
-    country?: string | null;
-
-    /**
-     * The region of the user.
-     */
-    region?: string | null;
-
-    /**
-     * The [IANA timezone](https://nodatime.org/TimeZones) of the user.
-     */
-    timezone?: string | null;
-  }
+  export type UserLocation = Messages.UserLocation;
 }
 
 export interface WebSearchToolRequestError {
-  error_code:
-    | 'invalid_tool_input'
-    | 'unavailable'
-    | 'max_uses_exceeded'
-    | 'too_many_requests'
-    | 'query_too_long'
-    | 'request_too_large';
+  error_code: WebSearchToolResultErrorCode;
 
   type: 'web_search_tool_result_error';
 }
@@ -2548,16 +2522,18 @@ export type WebSearchToolResultBlockParamContent =
   | WebSearchToolRequestError;
 
 export interface WebSearchToolResultError {
-  error_code:
-    | 'invalid_tool_input'
-    | 'unavailable'
-    | 'max_uses_exceeded'
-    | 'too_many_requests'
-    | 'query_too_long'
-    | 'request_too_large';
+  error_code: WebSearchToolResultErrorCode;
 
   type: 'web_search_tool_result_error';
 }
+
+export type WebSearchToolResultErrorCode =
+  | 'invalid_tool_input'
+  | 'unavailable'
+  | 'max_uses_exceeded'
+  | 'too_many_requests'
+  | 'query_too_long'
+  | 'request_too_large';
 
 export type MessageStreamEvent = RawMessageStreamEvent;
 
@@ -3213,6 +3189,7 @@ export declare namespace Messages {
     type URLImageSource as URLImageSource,
     type URLPDFSource as URLPDFSource,
     type Usage as Usage,
+    type UserLocation as UserLocation,
     type WebFetchBlock as WebFetchBlock,
     type WebFetchBlockParam as WebFetchBlockParam,
     type WebFetchTool20250910 as WebFetchTool20250910,
