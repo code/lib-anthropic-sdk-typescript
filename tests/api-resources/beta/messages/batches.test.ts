@@ -41,6 +41,7 @@ describe('resource batches', () => {
             max_tokens: 1024,
             messages: [{ content: 'Hello, world', role: 'user' }],
             model: 'claude-opus-4-6',
+            cache_control: { type: 'ephemeral', ttl: '5m' },
             container: {
               id: 'id',
               skills: [
@@ -228,7 +229,12 @@ describe('resource batches', () => {
     ).rejects.toThrow(Anthropic.NotFoundError);
   });
 
-  // Prism doesn't support application/x-jsonl responses
+  // Mock server doesn't support application/x-jsonl responses
+  test.skip('results', async () => {
+    const responsePromise = client.beta.messages.batches.results('message_batch_id');
+  });
+
+  // Mock server doesn't support application/x-jsonl responses
   test.skip('results: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
